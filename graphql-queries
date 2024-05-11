@@ -1,0 +1,155 @@
+
+
+//Query to find the checkout profile ID
+
+query {
+  checkoutProfiles(first: 10){
+    edges {
+      node {
+        id
+        isPublished
+        name
+      }
+    }
+  }
+}
+
+
+//Query to find file id of a custom font
+
+query {
+  files(first: 1, query:"filename:Carpenter-Regular.woff2" ){ 
+    edges {
+      node {
+        ... on GenericFile {
+          id
+        }
+      }
+    }
+  }
+}
+
+
+//Query to find id of an image such as a favicon
+
+query {
+  files(first: 1, query:"filename:icons8-star-filled-64.png" ){ 
+    edges {
+      node {
+        ... on MediaImage {
+          id
+        }
+      }
+    }
+  }
+}
+
+
+
+
+//Mutation
+
+mutation($checkoutBrandingInput: CheckoutBrandingInput!, $checkoutProfileId: ID!) {
+  checkoutBrandingUpsert(
+    checkoutBrandingInput: $checkoutBrandingInput, 
+    checkoutProfileId: $checkoutProfileId
+  ) {
+    checkoutBranding {
+      designSystem {
+        typography {
+          secondary {
+            name
+          }
+        }
+      }
+    }
+  }
+}
+
+
+//Variables Below:
+
+{
+  "checkoutProfileId": "gid://shopify/CheckoutProfile/26214457",
+  "checkoutBrandingInput": {
+    "designSystem": {
+      "colors": {
+        "schemes": {
+          "scheme1": {
+            "base": {
+              "text": "#ff3cae"
+            }, 
+            "primaryButton": {
+              "background": "#8158fc", 
+              "text": "#000000",
+              "hover": {
+                "background": "#588afc",
+                "text": "#000000"
+              }
+            }
+          }
+        }
+      },
+      
+      
+      "typography": {
+        "secondary": {
+          "customFontGroup": {
+            "base": {
+            "genericFileId": "gid://shopify/GenericFile/25779526172729", 
+             "weight":400
+            }, 
+            "bold":{
+                  "genericFileId": "gid://shopify/GenericFile/25779526172729", 
+             "weight":400
+            },
+            "loadingStrategy": "SWAP"
+          }
+        }
+      }
+    }, 
+    "customizations": {
+      "favicon": {
+        "mediaImageId": "gid://shopify/MediaImage/25779692339257"
+      },
+      "headingLevel2": {
+        "typography": {
+         "size": "BASE"
+        }
+      }, 
+      "primaryButton": {
+        "typography": {
+          "font": "SECONDARY"
+        }, 
+        "background": "NONE", 
+        "border": "FULL", 
+        "cornerRadius": "NONE"
+      }, 
+      "control": {
+        "color": "TRANSPARENT", 
+        "cornerRadius": "NONE"
+      },
+      "textField": {
+        "border": "BLOCK_END"
+      }, 
+      "select": {
+        "border": "BLOCK_END"
+      }
+    }
+    
+  }
+}
+
+
+
+
+
+//If you want to reset all styling, run thsi code:
+
+{
+  "checkoutProfileId": "gid://shopify/CheckoutProfile/26214457",
+  "checkoutBrandingInput": {
+    "designSystem": "null", 
+    "customiations": "null
+    }
+}
